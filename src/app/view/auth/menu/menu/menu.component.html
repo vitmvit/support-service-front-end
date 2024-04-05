@@ -1,0 +1,6 @@
+@if(this.role == 'ADMIN') {
+  <app-menu-admin [itemName]="this.itemName"></app-menu-admin>
+}
+@if(this.role == 'SUPPORT') {
+  <app-menu-support [itemName]="this.itemName"></app-menu-support>
+}

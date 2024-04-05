@@ -1,0 +1,56 @@
+<div class="container-fluid">
+  <div class="row">
+    <!--    menu-->
+    <div class="col-sm-auto bg-light sticky-top">
+      <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
+    </div>
+    <!--    /menu-->
+    <div class="col-sm p-3 min-vh-100">
+      <!--    header-->
+      @if(this.role == 'SUPPORT') {
+        <h2>Технический специалист:&nbsp; {{user.login}}</h2>
+      }@else {
+        <h2>Администратор:&nbsp; {{user.login}}</h2>
+      }
+      <hr />
+      <!--    /header-->
+      <!--      content-->
+      <h3>Смена пароля</h3>
+      <a (click)="openPopup()" class="link-primary">Сменить пароль</a>
+      <!--      modal view-->
+      <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+        <form>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Измените свой пароль</h4>
+              </div>
+              <div class="modal-body">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label for="newPassword" class="form-label"> Текущий пароль: </label>
+                    <input [(ngModel)]="oldPassword" type="password" name = "oldPassword" class="form-control" id="oldPassword" placeholder="example@mail.com" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="newPassword" class="form-label">Новый пароль: </label>
+                    <input [(ngModel)]="newPassword" type="password" name = "newPassword" class="form-control" id="newPassword" placeholder="example@mail.com" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Подтверждение пароля: </label>
+                    <input [(ngModel)]="confirmPassword" type="password" name = "confirmPassword" class="form-control" id="confirmPassword" placeholder="example@mail.com" required>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button" (click)="editPassword()">Изменить пароль</button>
+                <button type="button" class="btn btn-primary" (click)="closePopup()">Отмена</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!--      /modal view-->
+    </div>
+    <!--    /content-->
+  </div>
+</div>
