@@ -26,6 +26,7 @@ export class CabinetPageGeneralMessagesComponent implements OnInit {
               private userService: UserService,
               private chatService: ChatService
   ) {
+    sessionService.checkSession();
   }
 
   ngOnInit(): void {

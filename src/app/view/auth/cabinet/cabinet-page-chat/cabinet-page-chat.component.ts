@@ -50,7 +50,8 @@ export class CabinetPageChatComponent implements OnInit{
               private router: Router,
               private route: ActivatedRoute
   ) {
-    route.params.subscribe(params=>this.id=params["id"]);
+    sessionService.checkSession();
+    route.params.subscribe(params => this.id = params["id"]);
   }
 
   @HostListener('window:resize')

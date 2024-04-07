@@ -6,7 +6,7 @@ import {MenuComponent} from "../../menu/menu/menu.component";
 import {NgStyle} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {PasswordUpdateDto} from "../../../../model/dto/password.updare.dto";
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-cabinet-my-profile',
@@ -35,6 +35,7 @@ export class CabinetMyProfileComponent implements OnInit {
   constructor(private sessionService: SessionService,
               private router: Router,
               private userService: UserService) {
+    sessionService.checkSession();
   }
 
   ngOnInit(): void {
