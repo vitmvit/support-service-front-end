@@ -42,6 +42,8 @@ export class CabinetPageChatComponent implements OnInit{
   elem!: HTMLElement;
   send!: HTMLElement;
 
+  private refreshIntervalId: any;
+
   displayStyle = "none";
 
   constructor(private sessionService: SessionService,
@@ -75,6 +77,11 @@ export class CabinetPageChatComponent implements OnInit{
 
     this.getMe();
     this.getChat();
+
+    // Устанавливаем интервал обновления каждую секунду
+    this.refreshIntervalId = setInterval(() => {
+      this.getChat();
+    }, 1000);
 
     this.windowH = window.screen.height; // Получаем высоту окна
     this.windowW = window.screen.width; // Получаем ширину окна
