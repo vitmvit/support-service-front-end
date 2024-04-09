@@ -107,12 +107,19 @@ export class CabinetPageChatComponent implements OnInit{
         this.currentUsername = chatModel.userName
         this.currentSupport = chatModel.supportName
         this.currentChat = chatModel
+        this.toDate()
       }
     });
   }
 
+  toDate() {
+    for (let i = 0; i < this.listMessages.length; i++) {
+      this.listMessages[i].createDate = new Date(this.listMessages[i].createDate).toLocaleString()
+    }
+  }
+
   // Переход к списку чатов
-  toChats(){
+  toChats() {
     this.router.navigateByUrl('auth/cabinet/message');
   }
 

@@ -7,16 +7,16 @@ export class ChatModel {
   public userName: string; // Имя пользователя
   public messageList: MessageModel[]; // Список сообщений
   public status: string; // Статус чата
-  public createDate: Date; // Дата создания
-  public updateDate: Date; // Дата обновления
+  public createDate: string; // Дата создания
+  public updateDate: string; // Дата обновления
 
   constructor(id: number,
               supportName: string,
               userName: string,
               messageList: MessageModel[],
               status: string,
-              createDate: Date,
-              updateDate: Date) {
+              createDate: string,
+              updateDate: string) {
     this.id = id;
     this.supportName = supportName;
     this.userName = userName;
