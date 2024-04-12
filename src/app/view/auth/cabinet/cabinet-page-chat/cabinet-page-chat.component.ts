@@ -107,6 +107,11 @@ export class CabinetPageChatComponent implements OnInit{
         this.currentUsername = chatModel.userName
         this.currentSupport = chatModel.supportName
         this.currentChat = chatModel
+
+        this.listMessages = chatModel.messageList.sort((a, b) => {
+          return new Date(a.createDate).getTime() - new Date(b.createDate).getTime();
+        });
+
         this.toDate()
       }
     });
