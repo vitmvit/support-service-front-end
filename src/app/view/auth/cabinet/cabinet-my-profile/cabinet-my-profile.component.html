@@ -25,15 +25,31 @@
               <div class="modal-header">
                 <h4 class="modal-title">Измените свой пароль</h4>
               </div>
+              <div class="container">
+                @if (this.errorModel !== undefined) {
+                <div class="alert alert-danger border-0 my-4" role="alert">
+                  <div class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                    <div>
+                      Auth error (status: {{this.errorModel.status}}). {{this.errorModel.message}}
+                </div>
+              </div>
+            </div>
+                }
+              </div>
               <div class="modal-body">
                 <div class="card-body">
                   <div class="mb-3">
                     <label for="newPassword" class="form-label"> Текущий пароль: </label>
-                    <input [(ngModel)]="oldPassword" type="password" name = "oldPassword" class="form-control" id="oldPassword" placeholder="example@mail.com" required>
+                    <input [(ngModel)]="oldPassword" class="form-control" id="oldPassword" name="oldPassword"
+                           placeholder="example@mail.com" required type="password">
                   </div>
                   <div class="mb-3">
                     <label for="newPassword" class="form-label">Новый пароль: </label>
-                    <input [(ngModel)]="newPassword" type="password" name = "newPassword" class="form-control" id="newPassword" placeholder="example@mail.com" required>
+                    <input [(ngModel)]="newPassword" class="form-control" id="newPassword" name="newPassword"
+                           placeholder="example@mail.com" required type="password">
                   </div>
                   <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Подтверждение пароля: </label>

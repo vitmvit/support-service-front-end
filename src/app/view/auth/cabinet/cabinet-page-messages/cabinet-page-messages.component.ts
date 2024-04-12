@@ -39,6 +39,9 @@ export class CabinetPageMessagesComponent implements OnInit {
     // Получение списка чатов пользователя
     this.chatService.getMyChats(this.sessionService.getLogin()).subscribe({
       next: (chatModel) => {
+        this.chats = chatModel.sort((a, b) => {
+          return new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime();
+        });
         this.chats = chatModel.sort((a, b) => b.status.localeCompare(a.status));
         this.toDate()
       }

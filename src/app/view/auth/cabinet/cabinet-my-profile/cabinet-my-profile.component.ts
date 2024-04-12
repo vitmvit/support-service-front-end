@@ -7,6 +7,7 @@ import {NgStyle} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {PasswordUpdateDto} from "../../../../model/dto/password.updare.dto";
 import {Router} from '@angular/router';
+import {ErrorModel} from '../../../../model/entity/error.model';
 
 @Component({
   selector: 'app-cabinet-my-profile',
@@ -29,6 +30,7 @@ export class CabinetMyProfileComponent implements OnInit {
   oldPassword!: string;
   newPassword!: string;
   confirmPassword!: string;
+  errorModel!: ErrorModel | undefined;
 
   displayStyle = "none";
 
@@ -39,6 +41,11 @@ export class CabinetMyProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.oldPassword = "";
+    this.newPassword = "";
+    this.confirmPassword = "";
+    this.errorModel = undefined
+
     this.getMe();
   }
 
@@ -57,14 +64,20 @@ export class CabinetMyProfileComponent implements OnInit {
 
   // Метод для изменения пароля
   editPassword() {
-    this.userService.passwordUpdate(new PasswordUpdateDto(this.sessionService.getLogin(), this.oldPassword, this.newPassword, this.confirmPassword)).subscribe({
-      next: (response) => {
-        this.closePopup();
-        this.logOff();
-      },
-      error: () => {
-      }
-    });
+    this.errorModel = undefined
+    if (this.oldPassword != "" && this.newPassword != "" && this.confirmPassword != "") {
+      this.userService.passwordUpdate(new PasswordUpdateDto(this.sessionService.getLogin(), this.oldPassword, this.newPassword, this.confirmPassword)).subscribe({
+        next: (response) => {
+          this.closePopup();
+          this.logOff();
+        },
+        error: (fault) => {
+          this.errorModel = new ErrorModel("Перепроверьте данные!", fault.status)
+        }
+      });
+    } else {
+      this.errorModel = new ErrorModel("Необходимо заполнить все поля", 404)
+    }
   }
 
   openPopup() {
