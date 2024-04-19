@@ -1,11 +1,11 @@
-import { NgStyle } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ErrorModel } from '../../../../model/entity/error.model';
-import { UserModel } from '../../../../model/entity/user.model';
-import { SessionService } from '../../../../service/session.service';
-import { UserService } from '../../../../service/user.service';
-import { MenuComponent } from '../../menu/menu/menu.component';
+import {NgStyle} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {ErrorModel} from '../../../../model/entity/error.model';
+import {UserModel} from '../../../../model/entity/user.model';
+import {SessionService} from '../../../../service/session.service';
+import {UserService} from '../../../../service/user.service';
+import {MenuComponent} from '../../menu/menu/menu.component';
 
 @Component({
   selector: 'app-cabinet-page-control-user-delete',
@@ -35,8 +35,7 @@ export class CabinetPageControlUserDeleteComponent implements OnInit{
 
   constructor(private sessionService: SessionService,
               private userService: UserService) {
-    this.sessionService.checkCookies();
-    this.sessionService.checkLogin();
+    sessionService.checkSession();
   }
 
   ngOnInit(): void {

@@ -26,14 +26,16 @@ export class CabinetPageGeneralMessagesComponent implements OnInit {
               private userService: UserService,
               private chatService: ChatService
   ) {
+    sessionService.checkSession();
   }
 
   ngOnInit(): void {
     this.getMe();
     // Получение списка свободных чатов
     this.chatService.getFreeChats().subscribe({
-      next: (chatModel) => {
-        this.chats = chatModel
+      next: (chats) => {
+        this.chats = chats
+        this.toDate()
       }
     });
   }
@@ -42,10 +44,8 @@ export class CabinetPageGeneralMessagesComponent implements OnInit {
   setSupport(id: number): void {
     this.chatService.setSupport(id, this.sessionService.getLogin()).subscribe({
       next: (chatModel1) => {
-        console.log(chatModel1.supportName)
         this.chatService.setStatusToOpen(id).subscribe({
           next: (chatModel2) => {
-            console.log(chatModel2.status)
             this.reloadPage()
           }
         });
@@ -66,6 +66,13 @@ export class CabinetPageGeneralMessagesComponent implements OnInit {
         this.sessionService.logOff();
       }
     });
+  }
+
+  toDate() {
+    for (let i = 0; i < this.chats.length; i++) {
+      this.chats[i].createDate = new Date(this.chats[i].createDate).toLocaleString()
+      this.chats[i].updateDate = new Date(this.chats[i].updateDate).toLocaleString()
+    }
   }
 
   reloadPage(): void {

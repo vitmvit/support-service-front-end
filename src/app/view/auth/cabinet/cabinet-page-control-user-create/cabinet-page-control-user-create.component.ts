@@ -38,8 +38,7 @@ export class CabinetPageControlUserCreateComponent implements OnInit {
 
   constructor(private sessionService: SessionService,
               private userService: UserService) {
-    this.sessionService.checkCookies();
-    this.sessionService.checkLogin();
+    sessionService.checkSession();
   }
 
   ngOnInit(): void {
