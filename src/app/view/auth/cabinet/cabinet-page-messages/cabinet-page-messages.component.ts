@@ -39,18 +39,29 @@ export class CabinetPageMessagesComponent implements OnInit {
     // Получение списка чатов пользователя
     this.chatService.getMyChats(this.sessionService.getLogin()).subscribe({
       next: (chatModel) => {
-        this.chats = chatModel
+        this.chats = chatModel.sort((a, b) => {
+          return new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime();
+        });
+        this.chats = chatModel.sort((a, b) => b.status.localeCompare(a.status));
+        this.toDate()
       }
     });
   }
 
+  toDate() {
+    for (let i = 0; i < this.chats.length; i++) {
+      this.chats[i].createDate = new Date(this.chats[i].createDate).toLocaleString()
+      this.chats[i].updateDate = new Date(this.chats[i].updateDate).toLocaleString()
+    }
+  }
+
   // Переход к чату
-  toChat(id:number){
+  toChat(id: number) {
     this.router.navigate(['/auth/cabinet/chat', id]);
   }
 
   // Получение списка чатов пользователя
-  getMyChat(){
+  getMyChat() {
     this.chatService.getMyChats(this.sessionService.getLogin()).subscribe({
       next: (chatModel) => {
         this.chats = chatModel

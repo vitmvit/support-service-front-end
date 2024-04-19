@@ -42,6 +42,8 @@ export class CabinetPageChatComponent implements OnInit{
   elem!: HTMLElement;
   send!: HTMLElement;
 
+  private refreshIntervalId: any;
+
   displayStyle = "none";
 
   constructor(private sessionService: SessionService,
@@ -50,7 +52,8 @@ export class CabinetPageChatComponent implements OnInit{
               private router: Router,
               private route: ActivatedRoute
   ) {
-    route.params.subscribe(params=>this.id=params["id"]);
+    sessionService.checkSession();
+    route.params.subscribe(params => this.id = params["id"]);
   }
 
   @HostListener('window:resize')
@@ -74,6 +77,11 @@ export class CabinetPageChatComponent implements OnInit{
 
     this.getMe();
     this.getChat();
+
+    // Устанавливаем интервал обновления каждую секунду
+    this.refreshIntervalId = setInterval(() => {
+      this.getChat();
+    }, 1000);
 
     this.windowH = window.screen.height; // Получаем высоту окна
     this.windowW = window.screen.width; // Получаем ширину окна
@@ -99,12 +107,24 @@ export class CabinetPageChatComponent implements OnInit{
         this.currentUsername = chatModel.userName
         this.currentSupport = chatModel.supportName
         this.currentChat = chatModel
+
+        this.listMessages = chatModel.messageList.sort((a, b) => {
+          return new Date(a.createDate).getTime() - new Date(b.createDate).getTime();
+        });
+
+        this.toDate()
       }
     });
   }
 
+  toDate() {
+    for (let i = 0; i < this.listMessages.length; i++) {
+      this.listMessages[i].createDate = new Date(this.listMessages[i].createDate).toLocaleString()
+    }
+  }
+
   // Переход к списку чатов
-  toChats(){
+  toChats() {
     this.router.navigateByUrl('auth/cabinet/message');
   }
 
