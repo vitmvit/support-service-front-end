@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
       next: (tokenModel) => {
         // Получение роли из токена
         const role = this.getRoleInToken(tokenModel.accessToken)
-        if (role != 'USER') {
+        if (role != 'USER' && role != 'VET') {
           // Получение логина из токена
           const login = this.getLoginInToken(tokenModel.accessToken)
           if (login == this.login) {

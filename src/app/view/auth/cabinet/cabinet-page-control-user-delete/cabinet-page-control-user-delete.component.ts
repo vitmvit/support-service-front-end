@@ -39,7 +39,7 @@ export class CabinetPageControlUserDeleteComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.openRoles = ["ADMIN", "SUPPORT","USER"]
+    this.openRoles = ["ADMIN", "SUPPORT", "USER", "VET"]
     this.searchRole = "";
     this.searchLogin = "";
     this.findUser = undefined

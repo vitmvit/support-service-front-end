@@ -11,7 +11,8 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-cabinet-page-messages',
   standalone: true,
-  imports: [MenuComponent,
+  imports: [
+    MenuComponent,
     FormsModule,
     ReactiveFormsModule],
   templateUrl: './cabinet-page-messages.component.html',

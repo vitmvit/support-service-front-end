@@ -32,24 +32,31 @@ export class ChatService {
   // Получить чаты, связанные с определенным пользователем и пользователем поддержки
   getChatsByUserName(name: string, supportName: string): Observable<ChatModel[]> {
     return this.httpClient.get<ChatModel[]>(
-      "http://localhost:8080/api/v1/chats/userName/like/" + name + "/" + supportName,
-      this.sessionService.getHeaderToken()
+        "http://localhost:8080/api/v1/chats/userName/like/" + name + "/" + supportName,
+        this.sessionService.getHeaderToken()
     );
   }
 
   // Получить свободные чаты
   getFreeChats(): Observable<ChatModel[]> {
     return this.httpClient.get<ChatModel[]>(
-      "http://localhost:8080/api/v1/chats/status/FREE",
-      this.sessionService.getHeaderToken()
+        "http://localhost:8080/api/v1/chats/status/SUPPORT/FREE",
+        this.sessionService.getHeaderToken()
+    );
+  }
+
+  getSupportChats(): Observable<ChatModel[]> {
+    return this.httpClient.get<ChatModel[]>(
+        "http://localhost:8080/api/v1/chats/type/SUPPORT",
+        this.sessionService.getHeaderToken()
     );
   }
 
   // Создать новое сообщение в чате
   createMessage(model: MessageCreateDto): Observable<MessageCreateDto> {
     return this.httpClient.post<MessageCreateDto>(
-      "http://localhost:8080/api/v1/chats/messages", model,
-      this.sessionService.getHeaderToken()
+        "http://localhost:8080/api/v1/chats/messages", model,
+        this.sessionService.getHeaderToken()
     );
   }
 
@@ -72,8 +79,15 @@ export class ChatService {
   // Установить статус "CLOSED" для чата
   setStatusToClose(id: number): Observable<ChatModel> {
     return this.httpClient.post<ChatModel>(
-      "http://localhost:8080/api/v1/chats/status/" + id + "/CLOSED",
-      this.sessionService.getHeaderToken()
+        "http://localhost:8080/api/v1/chats/status/" + id + "/CLOSED",
+        this.sessionService.getHeaderToken()
     );
   }
+
+  // setFlagIsViewed(id: number): Observable<ChatModel> {
+  //   return this.httpClient.post<ChatModel>(
+  //       "http://localhost:8080/api/v1/chats/flag/" + id,
+  //       this.sessionService.getHeaderToken()
+  //   );
+  // }
 }

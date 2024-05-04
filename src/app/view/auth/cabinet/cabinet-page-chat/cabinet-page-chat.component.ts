@@ -81,10 +81,15 @@ export class CabinetPageChatComponent implements OnInit{
     // Устанавливаем интервал обновления каждую секунду
     this.refreshIntervalId = setInterval(() => {
       this.getChat();
+      // if(!this.currentChat.isViewed){
+      //   this.chatService.setFlagIsViewed(this.id).subscribe()
+      // }
     }, 1000);
 
     this.windowH = window.screen.height; // Получаем высоту окна
     this.windowW = window.screen.width; // Получаем ширину окна
+
+    // this.chatService.setFlagIsViewed(this.id).subscribe()
   }
 
   // Создание сообщения

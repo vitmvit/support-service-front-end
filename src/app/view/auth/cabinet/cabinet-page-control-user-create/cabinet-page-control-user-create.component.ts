@@ -42,7 +42,7 @@ export class CabinetPageControlUserCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.openRoles = ["ADMIN", "SUPPORT"]
+    this.openRoles = ["ADMIN", "SUPPORT", "VET"]
 
     this.newLogin = "";
     this.newPassword = "";
