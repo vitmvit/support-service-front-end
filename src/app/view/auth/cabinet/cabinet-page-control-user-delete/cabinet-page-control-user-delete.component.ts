@@ -72,7 +72,9 @@ export class CabinetPageControlUserDeleteComponent implements OnInit{
           this.loginToDelete = response.login
         },
         error: (fault) => {
-          // this.errorModel = new ErrorModel("Пользователь не найден!", fault.status);
+          if(fault.status == 500){
+            this.errorModel = new ErrorModel("Возникла непредвиденная ошибка на стороне сервера. Перезагрузите старницу позже!", fault.status);
+          }
         }
       });
     }else{

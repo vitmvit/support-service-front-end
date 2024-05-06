@@ -10,6 +10,7 @@ import {ChatService} from '../../../../service/chat.service';
 import {SessionService} from "../../../../service/session.service";
 import {UserService} from "../../../../service/user.service";
 import {MenuComponent} from "../../menu/menu/menu.component";
+import {ActuatorService} from '../../../../service/actuator.service';
 
 @Component({
   selector: 'app-cabinet-page-chat',
@@ -48,11 +49,17 @@ export class CabinetPageChatComponent implements OnInit{
 
   constructor(private sessionService: SessionService,
               private userService: UserService,
+              private actuatorService: ActuatorService,
               private chatService: ChatService,
               private router: Router,
               private route: ActivatedRoute
   ) {
     sessionService.checkSession();
+    actuatorService.getHealthMessageService().subscribe({
+      error: () => {
+        this.router.navigateByUrl('page500');
+      }
+    })
     route.params.subscribe(params => this.id = params["id"]);
   }
 
@@ -81,15 +88,10 @@ export class CabinetPageChatComponent implements OnInit{
     // Устанавливаем интервал обновления каждую секунду
     this.refreshIntervalId = setInterval(() => {
       this.getChat();
-      // if(!this.currentChat.isViewed){
-      //   this.chatService.setFlagIsViewed(this.id).subscribe()
-      // }
     }, 1000);
 
     this.windowH = window.screen.height; // Получаем высоту окна
     this.windowW = window.screen.width; // Получаем ширину окна
-
-    // this.chatService.setFlagIsViewed(this.id).subscribe()
   }
 
   // Создание сообщения

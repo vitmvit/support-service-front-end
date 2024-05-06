@@ -72,11 +72,15 @@ export class CabinetMyProfileComponent implements OnInit {
           this.logOff();
         },
         error: (fault) => {
-          this.errorModel = new ErrorModel("Перепроверьте данные!", fault.status)
+          if (fault.status == 500) {
+            this.errorModel = new ErrorModel("Возникла непредвиденная ошибка на стороне сервера. Перезагрузите старницу позже!", fault.status);
+          } else {
+            this.errorModel = new ErrorModel("Перепроверьте данные!", fault.status)
+          }
         }
       });
     } else {
-      this.errorModel = new ErrorModel("Необходимо заполнить все поля", 404)
+      this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404)
     }
   }
 

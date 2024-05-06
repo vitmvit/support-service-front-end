@@ -7,7 +7,9 @@
     <!--    /menu-->
     <div class="col-sm p-3 min-vh-100">
       <!--      header-->
-      <h2>Технический специалист:&nbsp;{{this.login}}</h2>
+      @if(this.user){
+        <h2>Технический специалист:&nbsp;{{this.login}}</h2>
+      }
       <hr />
       <!--      /header-->
       <!--      карточки чатов-->

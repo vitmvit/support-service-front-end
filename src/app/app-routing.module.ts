@@ -13,6 +13,7 @@ import {CabinetPageChatComponent} from './view/auth/cabinet/cabinet-page-chat/ca
 import {CabinetPageMessagesComponent} from './view/auth/cabinet/cabinet-page-messages/cabinet-page-messages.component';
 import { CabinetPageControlUserCreateComponent } from './view/auth/cabinet/cabinet-page-control-user-create/cabinet-page-control-user-create.component';
 import { CabinetPageControlUserDeleteComponent } from './view/auth/cabinet/cabinet-page-control-user-delete/cabinet-page-control-user-delete.component';
+import { Page500Component } from './view/welcome/page500/page500.component';
 
 export const routes: Routes = [
   // welcome
@@ -31,6 +32,9 @@ export const routes: Routes = [
   {path: '', redirectTo: 'auth/cabinet/chat-list', pathMatch: 'full' },
   {path: 'auth/cabinet/chat-list', component: CabinetPageChatComponent },
   {path: 'auth/cabinet/chat/:id', component: CabinetPageChatComponent },
+
+  // 500
+  {path: 'page500', component: Page500Component},
 
   // 404
   {path: '**', component: Page404Component}

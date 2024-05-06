@@ -71,6 +71,9 @@ export class CabinetPageControlUserCreateComponent implements OnInit {
           }else if(this.newPassword != this.newPasswordConfirm){
             this.errorModel = new ErrorModel("Перепроверьте пароль!", fault.status);
           }
+          if(fault.status == 500){
+            this.errorModel = new ErrorModel("Возникла непредвиденная ошибка на стороне сервера. Перезагрузите старницу позже!", fault.status);
+          }
         }
       });
     } else{
