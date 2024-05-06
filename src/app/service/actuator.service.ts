@@ -5,8 +5,6 @@ import {Observable} from "rxjs";
 @Injectable({providedIn: "root"})
 export class ActuatorService {
 
-  private apiBaseUrl = 'http://localhost:8080/order/actuator';
-
   constructor(private http: HttpClient) { }
 
   getHealthService(): Observable<any> {
