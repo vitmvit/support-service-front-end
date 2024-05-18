@@ -1,105 +1,118 @@
 <div class="container-fluid">
-  <div class="row">
-    <!--    menu-->
-    <div class="col-sm-auto bg-light sticky-top">
-      <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
-    </div>
-    <!--    /menu-->
-    <div class="col-sm p-3 min-vh-100">
-      <!--      header-->
-      @if(this.user){
-        <h2>Администратор:&nbsp;{{this.user.login}}</h2>
-      }
-      <hr />
-      <!--      /header-->
-      <!--      navbar-->
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page">Создание</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="auth/cabinet/control/delete">Удаление</a>
-        </li>
-      </ul>
-      <!--      /navbar-->
-      <!--      error alert-->
-      @if (this.errorModel !== undefined) {
-        <div class="alert alert-danger border-0 my-4" role="alert">
-          <div class="d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-            </svg>
-            <div>
-              {{this.errorModel.message}}
-            </div>
-          </div>
+    <div class="row">
+        <!--    menu-->
+        <div class="col-sm-auto bg-light sticky-top">
+            <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
         </div>
-      }
-      <!--      /error alert-->
-      <!--            форма создания пользователя-->
-      <form>
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title my-3">Создание нового пользователя</h4>
+        <!--    /menu-->
+        <div class="col-sm p-3 min-vh-100">
+            <!--      header-->
+            @if (this.user) {
+                <h2>Администратор:&nbsp;{{ this.user.login }}</h2>
+            }
+            <hr/>
+            <!--      /header-->
+            <!--      navbar-->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">Создание</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="auth/cabinet/control/delete">Удаление</a>
+                </li>
+            </ul>
+            <!--      /navbar-->
+            <!--      error alert-->
+            @if (this.errorModel !== undefined) {
+                <div class="alert alert-danger border-0 my-4" role="alert">
+                    <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                        <div>
+                            {{ this.errorModel.message }}
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--      /error alert-->
+            <!--            success alert-->
+            @if (this.alertMessage) {
+                <div class="alert alert-success alert-dismissible fade show my-4" role="alert">
+                    {{ this.alertMessage }}
+                    <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+            }
+            <!--            /success alert-->
+            <!--            форма создания пользователя-->
+            <form>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title my-3">Создание нового пользователя</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="login" class="form-label">Логин: </label>
+                                    <input [(ngModel)]="newLogin" type="text" name="login" class="form-control"
+                                           id="login" placeholder="login@mail.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Пароль: </label>
+                                    <input [(ngModel)]="newPassword" type="text" name="password" class="form-control"
+                                           id="password" placeholder="1234567" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passwordConfirm" class="form-label">Подтверждение пароля: </label>
+                                    <input [(ngModel)]="newPasswordConfirm" type="text" name="passwordConfirm"
+                                           class="form-control" id="passwordConfirm" placeholder="1234567" required>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-group">
+                                        <label for="role" class="form-label">Роль: </label>
+                                        <select class="form-control" id="role"
+                                                [(ngModel)]="this.newRole"
+                                                [ngModelOptions]="{standalone: true}">
+                                            @for (item of openRoles; track item) {
+                                                <option>{{ item }}</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button (click)="openPopup()" type="button" class="btn btn-primary">Создать</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!--            /форма создания пользователя-->
+            <!--      modal view-->
+            <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+                <form>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Создание пользователя</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    Создать пользователя {{ newLogin }}?
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="button" (click)="createUser()">Создать</button>
+                                <button type="button" class="btn btn-primary" (click)="closePopup()">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="modal-body">
-              <div class="card-body">
-                <div class="mb-3">
-                  <label for="login" class="form-label">Логин: </label>
-                  <input [(ngModel)]="newLogin" type="text" name = "login" class="form-control" id="login" placeholder="example@mail.com" required>
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Пароль: </label>
-                  <input [(ngModel)]="newPassword" type="text" name = "password" class="form-control" id="password" placeholder="1234567" required>
-                </div>
-                <div class="mb-3">
-                  <label for="passwordConfirm" class="form-label">Подтверждение пароля: </label>
-                  <input [(ngModel)]="newPasswordConfirm" type="text" name = "passwordConfirm" class="form-control" id="passwordConfirm" placeholder="1234567" required>
-                </div>
-                <div class="mb-3">
-                  <div class="form-group">
-                    <label for="role" class="form-label">Роль: </label>
-                    <select class="form-control" id="role"
-                            [(ngModel)]="this.newRole"
-                            [ngModelOptions]="{standalone: true}">
-                      @for (item of openRoles; track item) {
-                        <option>{{item}}</option>
-                      }
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button (click)="openPopup()" type="button" class="btn btn-primary" >Создать</button>
-            </div>
-          </div>
+            <!--      /modal view-->
         </div>
-      </form>
-      <!--            /форма создания пользователя-->
-      <!--      modal view-->
-      <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
-        <form>
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Создание пользователя</h4>
-              </div>
-              <div class="modal-body">
-                <div class="card-body">
-                  Создать данного пользователя? ({{newLogin}})
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary" type="button" (click)="createUser()">Создать</button>
-                <button type="button" class="btn btn-primary" (click)="closePopup()">Отмена</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <!--      /modal view-->
     </div>
-  </div>
 </div>

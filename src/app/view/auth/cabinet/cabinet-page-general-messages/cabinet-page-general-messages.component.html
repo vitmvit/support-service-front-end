@@ -1,39 +1,41 @@
 <div class="container-fluid">
-  <div class="row">
-    <!--    menu-->
-    <div class="col-sm-auto bg-light sticky-top">
-      <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
-    </div>
-    <!--    /menu-->
-    <div class="col-sm p-3 min-vh-100">
-      <!--      header-->
-      @if(this.user){
-        <h2>Технический специалист:&nbsp;{{this.login}}</h2>
-      }
-      <hr />
-      <!--      /header-->
-      <!--      карточки чатов-->
-      @for (item of chats; track item.id) {
-        <div class="card my-4">
-          <h5 class="card-header">Дата создания:&nbsp;{{ item.updateDate }}</h5>
-          <div class="card-body">
-            <h5 class="card-title">Пользователь:&nbsp;{{item.userName}}</h5>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button (click)="setSupport(item.id)" class="btn btn-primary me-md-2" type="button">
-                Подписаться
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
+    <div class="row">
+        <!--    menu-->
+        <div class="col-sm-auto bg-light sticky-top">
+            <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
         </div>
-      } @empty {
-        <div class="text-center">
-          <img src="assets/img/empty_list.jpg" class="w-50" alt="pet">
+        <!--    /menu-->
+        <div class="col-sm p-3 min-vh-100">
+            <!--      header-->
+            @if (this.user) {
+                <h2>Технический специалист:&nbsp;{{ this.login }}</h2>
+            }
+            <hr/>
+            <!--      /header-->
+            <!--      карточки чатов-->
+            @for (item of chats; track item.id) {
+                <div class="card my-4">
+                    <h5 class="card-header">Дата создания:&nbsp;{{ item.updateDate }}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Пользователь:&nbsp;{{ item.userName }}</h5>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button (click)="setSupport(item.id)" class="btn btn-primary me-md-2" type="button">
+                                Подписаться
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            } @empty {
+                <div class="text-center">
+                    <img src="assets/img/empty_list.jpg" class="w-50" alt="pet">
+                </div>
+            }
+            <!--      /карточки чатов-->
         </div>
-      }
-      <!--      /карточки чатов-->
     </div>
-  </div>
 </div>

@@ -13,160 +13,162 @@ import {MenuComponent} from "../../menu/menu/menu.component";
 import {ActuatorService} from '../../../../service/actuator.service';
 
 @Component({
-  selector: 'app-cabinet-page-chat',
-  standalone: true,
-  imports: [
-    MenuComponent,
-    NgIf,
-    NgStyle,
-    FormsModule],
-  templateUrl: './cabinet-page-chat.component.html',
-  styleUrl: './cabinet-page-chat.component.css'
+    selector: 'app-cabinet-page-chat',
+    standalone: true,
+    imports: [
+        MenuComponent,
+        NgIf,
+        NgStyle,
+        FormsModule],
+    templateUrl: './cabinet-page-chat.component.html',
+    styleUrl: './cabinet-page-chat.component.css'
 })
-export class CabinetPageChatComponent implements OnInit{
-  itemName = "message-page";
+export class CabinetPageChatComponent implements OnInit {
+    itemName = "message-page";
 
-  user!: UserModel;
-  role!: string;
-  id!: number;
-  currentChat!: ChatModel;
-  listMessages!: MessageModel[];
-  currentUsername!: string;
-  currentSupport!: string;
-  newMessage!: string;
+    user!: UserModel;
+    role!: string;
+    id!: number;
+    currentChat!: ChatModel;
+    listMessages!: MessageModel[];
+    currentUsername!: string;
+    currentSupport!: string;
+    newMessage!: string;
 
-  windowH!: number;
-  windowW!: number;
-  headerH!: number;
-  chatH!: number;
-  sendH!: number;
-  elem!: HTMLElement;
-  send!: HTMLElement;
+    windowH!: number;
+    windowW!: number;
+    headerH!: number;
+    chatH!: number;
+    sendH!: number;
+    elem!: HTMLElement;
+    send!: HTMLElement;
 
-  private refreshIntervalId: any;
+    private refreshIntervalId: any;
 
-  displayStyle = "none";
+    displayStyle = "none";
 
-  constructor(private sessionService: SessionService,
-              private userService: UserService,
-              private actuatorService: ActuatorService,
-              private chatService: ChatService,
-              private router: Router,
-              private route: ActivatedRoute
-  ) {
-    sessionService.checkSession();
-    actuatorService.getHealthMessageService().subscribe({
-      error: () => {
-        this.router.navigateByUrl('page500');
-      }
-    })
-    route.params.subscribe(params => this.id = params["id"]);
-  }
+    constructor(private sessionService: SessionService,
+                private userService: UserService,
+                private actuatorService: ActuatorService,
+                private chatService: ChatService,
+                private router: Router,
+                private route: ActivatedRoute
+    ) {
+        this.actuatorService.getHealthService().subscribe({
+            error: () => {
+                this.router.navigateByUrl('page500');
+            }
+        })
 
-  @HostListener('window:resize')
-  onWindowResize() {
-    this.reloadPage();
-  }
+        sessionService.checkSession();
+        route.params.subscribe(params => this.id = params["id"]);
+    }
 
-  // После инициализации представления компонента
-  ngAfterViewInit() {
-    // @ts-ignore
-    this.elem = document.getElementById("header"); // Получаем элемент заголовка
-    this.headerH = this.elem.offsetHeight // Получаем высоту заголовка
-    // @ts-ignore
-    this.send = document.getElementById("send"); // Получаем элемент отправки сообщения
-    this.sendH = this.send.offsetHeight // Получаем высоту элемента отправки
-    this.chatH = this.windowH - this.headerH - this.sendH // Вычисляем высоту чата
-  }
+    @HostListener('window:resize')
+    onWindowResize() {
+        this.reloadPage();
+    }
 
-  ngOnInit(): void {
-    this.newMessage = ""
+    // После инициализации представления компонента
+    ngAfterViewInit() {
+        // @ts-ignore
+        this.elem = document.getElementById("header"); // Получаем элемент заголовка
+        this.headerH = this.elem.offsetHeight // Получаем высоту заголовка
+        // @ts-ignore
+        this.send = document.getElementById("send"); // Получаем элемент отправки сообщения
+        this.sendH = this.send.offsetHeight // Получаем высоту элемента отправки
+        this.chatH = this.windowH - this.headerH - this.sendH // Вычисляем высоту чата
+        // this.h = this.chatH-(this.headerH*2)-this.sendH-50
+    }
 
-    this.getMe();
-    this.getChat();
+    ngOnInit(): void {
+        this.newMessage = ""
 
-    // Устанавливаем интервал обновления каждую секунду
-    this.refreshIntervalId = setInterval(() => {
-      this.getChat();
-    }, 1000);
+        this.getMe();
+        this.getChat();
 
-    this.windowH = window.screen.height; // Получаем высоту окна
-    this.windowW = window.screen.width; // Получаем ширину окна
-  }
+        // Устанавливаем интервал обновления каждую секунду
+        this.refreshIntervalId = setInterval(() => {
+            this.getChat();
+        }, 1000);
 
-  // Создание сообщения
-  createMessage(){
-    if(this.newMessage != ""){
-      this.chatService.createMessage(new MessageCreateDto(this.currentChat.id, this.currentSupport, this.newMessage)).subscribe({
-        next: (newMessage) => {
-          this.newMessage = ""
-          this.getChat();
+        this.windowH = window.screen.height; // Получаем высоту окна
+        this.windowW = window.screen.width; // Получаем ширину окна
+    }
+
+    // Создание сообщения
+    createMessage() {
+        if (this.newMessage != "") {
+            this.chatService.createMessage(new MessageCreateDto(this.currentChat.id, this.currentSupport, this.newMessage)).subscribe({
+                next: (newMessage) => {
+                    this.newMessage = ""
+                    this.getChat();
+                }
+            });
         }
-      });
     }
-  }
 
-  // Получение чата по идентификатору
-  getChat(){
-    this.chatService.getChatById(this.id).subscribe({
-      next: (chatModel) => {
-        this.listMessages = chatModel.messageList
-        this.currentUsername = chatModel.userName
-        this.currentSupport = chatModel.supportName
-        this.currentChat = chatModel
+    // Получение чата по идентификатору
+    getChat() {
+        this.chatService.getChatById(this.id).subscribe({
+            next: (chatModel) => {
+                this.listMessages = chatModel.messageList
+                this.currentUsername = chatModel.userName
+                this.currentSupport = chatModel.supportName
+                this.currentChat = chatModel
 
-        this.listMessages = chatModel.messageList.sort((a, b) => {
-          return new Date(a.createDate).getTime() - new Date(b.createDate).getTime();
+                this.listMessages = chatModel.messageList.sort((a, b) => {
+                    return new Date(a.createDate).getTime() - new Date(b.createDate).getTime();
+                });
+
+                this.toDate()
+            }
         });
-
-        this.toDate()
-      }
-    });
-  }
-
-  toDate() {
-    for (let i = 0; i < this.listMessages.length; i++) {
-      this.listMessages[i].createDate = new Date(this.listMessages[i].createDate).toLocaleString()
     }
-  }
 
-  // Переход к списку чатов
-  toChats() {
-    this.router.navigateByUrl('auth/cabinet/message');
-  }
+    toDate() {
+        for (let i = 0; i < this.listMessages.length; i++) {
+            this.listMessages[i].createDate = new Date(this.listMessages[i].createDate).toLocaleString()
+        }
+    }
 
-  // Получение информации о текущем пользователе
-  getMe() {
-    this.userService.me(this.sessionService.getLogin()).subscribe({
-      next: (response) => {
-        this.user = response;
-        this.role = response.role;
-      },
-      error: () => {
-        this.sessionService.logOff();
-      }
-    });
-  }
+    // Переход к списку чатов
+    toChats() {
+        this.router.navigateByUrl('auth/cabinet/message');
+    }
 
-  openPopup() {
-    this.displayStyle = "block";
-  }
+    // Получение информации о текущем пользователе
+    getMe() {
+        this.userService.me(this.sessionService.getLogin()).subscribe({
+            next: (response) => {
+                this.user = response;
+                this.role = response.role;
+            },
+            error: () => {
+                this.sessionService.logOff();
+            }
+        });
+    }
 
-  closePopup() {
-    this.displayStyle = "none";
-  }
+    openPopup() {
+        this.displayStyle = "block";
+    }
 
-  // Закрытие диалога
-  closeDialog() {
-    this.chatService.setStatusToClose(this.currentChat.id).subscribe({
-      next: (chatModel2) => {
-        this.reloadPage()
-      }
-    });
-    this.closePopup()
-  }
+    closePopup() {
+        this.displayStyle = "none";
+    }
 
-  reloadPage(): void {
-    window.location.reload();
-  }
+    // Закрытие диалога
+    closeDialog() {
+        this.chatService.setStatusToClose(this.currentChat.id).subscribe({
+            next: () => {
+                this.reloadPage()
+            }
+        });
+        this.closePopup()
+    }
+
+    reloadPage(): void {
+        window.location.reload();
+    }
 }

@@ -2,30 +2,30 @@ import {MessageModel} from "./message.model";
 
 export class ChatModel {
 
-  public id: number; // Идентификатор чата
-  public supportName: string; // Имя поддержки
-  public userName: string; // Имя пользователя
-  public messageList: MessageModel[]; // Список сообщений
-  public status: string; // Статус чата
-  public type: string;
-  public createDate: string; // Дата создания
-  public updateDate: string; // Дата обновления
+    public id: number; // Идентификатор чата
+    public supportName: string; // Имя поддержки
+    public userName: string; // Имя пользователя
+    public messageList: MessageModel[]; // Список сообщений
+    public status: string; // Статус чата
+    public type: string;
+    public createDate: string; // Дата создания
+    public updateDate: string; // Дата обновления
 
-  constructor(id: number,
-              supportName: string,
-              userName: string,
-              messageList: MessageModel[],
-              status: string,
-              type: string,
-              createDate: string,
-              updateDate: string) {
-    this.id = id;
-    this.supportName = supportName;
-    this.userName = userName;
-    this.messageList = messageList;
-    this.status = status;
-    this.type = type;
-    this.createDate = createDate;
-    this.updateDate = updateDate;
-  }
+    constructor(id: number,
+                supportName: string,
+                userName: string,
+                messageList: MessageModel[],
+                status: string,
+                type: string,
+                createDate: string,
+                updateDate: string) {
+        this.id = id;
+        this.supportName = supportName;
+        this.userName = userName;
+        this.messageList = messageList;
+        this.status = status;
+        this.type = type;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
 }

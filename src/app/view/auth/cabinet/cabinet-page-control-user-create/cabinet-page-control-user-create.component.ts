@@ -7,103 +7,121 @@ import {UserModel} from "../../../../model/entity/user.model";
 import {SessionService} from "../../../../service/session.service";
 import {UserService} from "../../../../service/user.service";
 import {MenuComponent} from "../../menu/menu/menu.component";
+import {ActuatorService} from "../../../../service/actuator.service";
+import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-cabinet-page-control-user-create',
-  standalone: true,
-  imports: [
-    MenuComponent,
-    FormsModule,
-    NgStyle
-  ],
-  templateUrl: './cabinet-page-control-user-create.component.html',
-  styleUrl: './cabinet-page-control-user-create.component.css'
+    selector: 'app-cabinet-page-control-user-create',
+    standalone: true,
+    imports: [
+        MenuComponent,
+        FormsModule,
+        NgStyle
+    ],
+    templateUrl: './cabinet-page-control-user-create.component.html',
+    styleUrl: './cabinet-page-control-user-create.component.css'
 })
 export class CabinetPageControlUserCreateComponent implements OnInit {
 
-  itemName = "control-page";
+    itemName = "control-page";
 
-  user!: UserModel;
-  role!: string;
-  errorModel!: ErrorModel | undefined;
+    user!: UserModel;
+    role!: string;
+    errorModel!: ErrorModel | undefined;
 
-  newLogin!: string;
-  newPassword!: string;
-  newPasswordConfirm!: string;
-  newRole!: string;
+    newLogin!: string;
+    newPassword!: string;
+    newPasswordConfirm!: string;
+    newRole!: string;
 
-  openRoles!: string[]
+    openRoles!: string[]
 
-  displayStyle = "none";
+    displayStyle = "none";
+    alertMessage: string | undefined = undefined;
 
-  constructor(private sessionService: SessionService,
-              private userService: UserService) {
-    sessionService.checkSession();
-  }
+    constructor(private sessionService: SessionService,
+                private userService: UserService,
+                private actuatorService: ActuatorService,
+                private router: Router) {
+        this.actuatorService.getHealthService().subscribe({
+            error: () => {
+                this.router.navigateByUrl('page500');
+            }
+        })
 
-  ngOnInit(): void {
-    this.openRoles = ["ADMIN", "SUPPORT", "VET"]
+        sessionService.checkSession();
+    }
 
-    this.newLogin = "";
-    this.newPassword = "";
-    this.newPasswordConfirm = "";
-    this.newRole = "";
+    ngOnInit(): void {
+        this.openRoles = ["ADMIN", "SUPPORT", "VET", "EDITOR"]
 
-    this.getMe();
-  }
+        this.newLogin = "";
+        this.newPassword = "";
+        this.newPasswordConfirm = "";
+        this.newRole = "";
 
-  createUser(){
-    this.errorModel = undefined
-    // Проверка заполнения всех полей
-    if (this.newLogin != "" && this.newPassword != "" && this.newPasswordConfirm != "" && this.newRole != ""){
-      this.userService.createUser(new UserCreateDto(this.newLogin, this.newPassword, this.newPasswordConfirm, this.newRole)).subscribe({
-        next: (response) => {
-          this.newLogin = "";
-          this.newPassword = "";
-          this.newPasswordConfirm = "";
-          this.newRole = "";
-        },
-        error: (fault) =>
-        {
-          // Проверка ошибок ввода данных
-          if (this.newLogin == "" || this.newPassword == "" || this.newPasswordConfirm == "" || this.newRole == ""){
+        this.getMe();
+    }
+
+    getMe() {
+        this.userService.me(this.sessionService.getLogin()).subscribe({
+            next: (response) => {
+                this.user = response;
+                this.role = response.role;
+            },
+            error: () => {
+                this.sessionService.logOff();
+            }
+        });
+    }
+
+    createUser() {
+        this.errorModel = undefined
+        // Проверка заполнения всех полей
+        if (this.newLogin != "" && this.newPassword != "" && this.newPasswordConfirm != "" && this.newRole != "") {
+            this.userService.createUser(new UserCreateDto(this.newLogin, this.newPassword, this.newPasswordConfirm, this.newRole)).subscribe({
+                next: (response) => {
+                    this.newLogin = "";
+                    this.newPassword = "";
+                    this.newPasswordConfirm = "";
+                    this.newRole = "";
+                    this.alertMessage = "Пользователь успешно создан!"
+                },
+                error: (fault) => {
+                    // Проверка ошибок ввода данных
+                    if (this.newLogin == "" || this.newPassword == "" || this.newPasswordConfirm == "" || this.newRole == "") {
+                        this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404);
+                    } else if (this.newPassword != this.newPasswordConfirm) {
+                        this.errorModel = new ErrorModel("Перепроверьте пароль!", fault.status);
+                    } else {
+                        if (fault.status == 500 || fault.status == 0) {
+                            this.errorModel = new ErrorModel("Возникла ошибка на стороне сервера. Перезагрузите старницу позже!", fault.status);
+                        } else {
+                            this.errorModel = new ErrorModel("Перепроверьте данные!", fault.status);
+                        }
+                    }
+                }
+            });
+        } else {
             this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404);
-          }else if(this.newPassword != this.newPasswordConfirm){
-            this.errorModel = new ErrorModel("Перепроверьте пароль!", fault.status);
-          }
-          if(fault.status == 500){
-            this.errorModel = new ErrorModel("Возникла непредвиденная ошибка на стороне сервера. Перезагрузите старницу позже!", fault.status);
-          }
         }
-      });
-    } else{
-      this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404);
+        this.closePopup()
     }
-    this.closePopup()
-  }
 
-  getMe() {
-    this.userService.me(this.sessionService.getLogin()).subscribe({
-      next: (response) => {
-        this.user = response;
-        this.role = response.role;
-      },
-      error: () => {
-        this.sessionService.logOff();
-      }
-    });
-  }
-
-  openPopup() {
-    // Проверка заполнения всех полей
-    if (this.newLogin != "" && this.newPassword != "" && this.newPasswordConfirm != "" && this.newRole != ""){
-      this.displayStyle = "block";
-    } else{
-      this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404);
+    closeAlert() {
+        this.alertMessage = undefined
     }
-  }
 
-  closePopup() {
-    this.displayStyle = "none";
-  }
+    openPopup() {
+        // Проверка заполнения всех полей
+        if (this.newLogin != "" && this.newPassword != "" && this.newPasswordConfirm != "" && this.newRole != "") {
+            this.displayStyle = "block";
+        } else {
+            this.errorModel = new ErrorModel("Необходимо заполнить все поля!", 404);
+        }
+    }
+
+    closePopup() {
+        this.displayStyle = "none";
+    }
 }

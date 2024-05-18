@@ -1,0 +1,279 @@
+<div class="container-fluid">
+    <div class="row">
+        <!--    menu-->
+        <div class="col-sm-auto bg-light sticky-top">
+            <app-menu [itemName]=this.itemName [role]=this.role></app-menu>
+        </div>
+        <!--    /menu-->
+        <div class="col-sm p-3 min-vh-100">
+            <!--      header-->
+            @if (this.user) {
+                <h2>Редактор:&nbsp;{{ this.user.login }}</h2>
+            }
+            <hr/>
+            <!--      /header-->
+            @if (this.alertMessage) {
+                <div class="alert alert-success alert-dismissible fade show my-4" role="alert">
+                    {{ this.alertMessage }}
+                    <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+            }
+            <!--      navbar-->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'animals'}" (click)="toggle('animals')">Виды
+                        животных</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'breeds'}"
+                       (click)="toggle('breeds')">Породы</a>
+                </li>
+            </ul>
+            <br>
+            <!--      /navbar-->
+            @if (this.activeTab == 'animals') {
+                <div class="container">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                        <h3>Управление видами животных</h3>
+                        <button class="btn btn-primary" type="button" (click)="openPopupAddData()">Добавить</button>
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="login" class="form-label">Вид для поиска: </label>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <input [(ngModel)]="criteriaType" type="text" name="confirmPassword" class="form-control"
+                                   id="login" placeholder="Кот"
+                                   required>
+                            <button class="btn btn-primary" type="button" (click)="getDataByCriteria()">Поиск</button>
+                            <button class="btn btn-primary" type="button" (click)="getDataByCancel()">Отмена</button>
+                        </div>
+                    </div>
+                    @for (item of animalTypeList; track item.id) {
+                        <br>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" type="button" (click)="openPopupUpdateData(item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-pen" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-primary" type="button" (click)="openPopupDeleteData(item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-trash3" viewBox="0 0 16 16">
+                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="text-center">
+                            <img src="assets/img/empty.jpg" class="w-25" alt="pet">
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (this.activeTab == 'breeds') {
+                <div class="container">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                        <h3>Управление породами животных</h3>
+                        <button class="btn btn-primary" type="button" (click)="openPopupAddData()">Добавить</button>
+                    </div>
+                    <label for="type" class="form-label">Вид для поиска: </label>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                        <input [(ngModel)]="criteriaType" type="text" name="criteriaType" class="form-control" id="type"
+                               placeholder="Перс" required>
+                        <button class="btn btn-primary" type="button" (click)="getDataByCriteria()">Поиск</button>
+                        <button class="btn btn-primary" type="button" (click)="getDataByCancel()">Отмена</button>
+                    </div>
+                    @for (item of breedList; track item.id) {
+                        <br>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" type="button" (click)="openPopupUpdateData(item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-pen" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-primary" type="button" (click)="openPopupDeleteData(item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-trash3" viewBox="0 0 16 16">
+                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="text-center">
+                            <img src="assets/img/empty.jpg" class="w-25" alt="pet">
+                        </div>
+                    }
+                </div>
+            }
+            <!--                  modal view add data-->
+            <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog"
+                 [ngStyle]="{'display':displayStyleAddData}">
+                <form>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @if (this.activeTab == 'animals') {
+                                    <h4 class="modal-title">Добавление вида животного</h4>
+                                } @else {
+                                    <h4 class="modal-title">Добавление породы животного</h4>
+                                }
+                            </div>
+                            @if (this.alertWarning) {
+                                <div class="alert alert-warning alert-dismissible fade show my-4 mx-3" role="alert">
+                                    {{ this.alertWarning }}
+                                    <button (click)="closeAlertWarning()" type="button" class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                </div>
+                            }
+                            @if (this.activeTab == 'animals') {
+                                <div class="modal-body">
+                                    <label for="type" class="form-label">Введие новый вид: </label>
+                                    <input [(ngModel)]="newType" type="text" name="confirmPassword" class="form-control"
+                                           id="type" placeholder="Перс" required>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="button" (click)="createAnimalType()">Добавить
+                                    </button>
+                                    <button type="button" class="btn btn-primary" (click)="closePopupAddData()">Отмена
+                                    </button>
+                                </div>
+                            } @else {
+                                <div class="modal-body">
+                                    <label for="type" class="form-label">Введие новую породу: </label>
+                                    <input [(ngModel)]="newType" type="text" name="confirmPassword" class="form-control"
+                                           id="type" placeholder="Перс" required>
+                                    <br>
+                                    <label for="typeName" class="form-label">Выберите вид животного из списка
+                                        ниже: </label>
+
+                                    <input [(ngModel)]="typeName" type="text" name="typeName" class="form-control"
+                                           id="typeName" placeholder="Перс" required>
+                                    <br>
+                                    <div class="card-body"
+                                         style="height: 300px; overflow: scroll; border: 1px solid #474747; border-radius: 10px">
+                                        @for (item of animalTypeListForSearch; track item.id) {
+                                            <br>
+                                            <div class="card" (click)="this.typeName=item.name; this.type = item">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ item.name }}</h5>
+                                                </div>
+                                            </div>
+                                        } @empty {
+                                            <div class="text-center">
+                                                <img src="assets/img/empty.jpg" class="w-25" alt="pet">
+                                            </div>
+                                        }
+                                    </div>
+                                    <br>
+                                    <label for="searchType" class="form-label">Поиск по списку: </label>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                        <input [(ngModel)]="searchType" type="text" name="searchType"
+                                               class="form-control" id="searchType" placeholder="Кот"
+                                               required>
+                                        <button class="btn btn-primary" type="button" (click)="getDataBySearchType()">
+                                            Поиск
+                                        </button>
+                                        <button class="btn btn-primary" type="button" (click)="getDataByCancel()">
+                                            Отмена
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="button" (click)="createBreed()">Добавить
+                                    </button>
+                                    <button type="button" class="btn btn-primary" (click)="closePopupAddData()">Отмена
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--                  /modal view add data-->
+            <!--            modal view delete data-->
+            <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog"
+                 [ngStyle]="{'display':displayStyleDeleteData}">
+                <form>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Удаление вида из справочника</h4>
+                            </div>
+                            <div class="modal-body">
+                                Удалить выбранную позицию?
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="button" (click)="deleteData()">Удалить</button>
+                                <button type="button" class="btn btn-primary" (click)="closePopupDeleteData()">Отмена
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--           / modal view delete data-->
+            <!--            modal view update data-->
+            <div class="modal bg-light bg-opacity-75" tabindex="-1" role="dialog"
+                 [ngStyle]="{'display':displayStyleUpdateData}">
+                <form>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @if (this.toUpdate) {
+                                    @if (this.activeTab == 'animals') {
+                                        <h4 class="modal-title">Обновление вида животного: {{ this.toUpdate.name }}</h4>
+                                    } @else {
+                                        <h4 class="modal-title">Обновление породы
+                                            животного: {{ this.toUpdate.name }}</h4>
+                                    }
+                                }
+                            </div>
+                            @if (this.alertWarning) {
+                                <div class="alert alert-warning alert-dismissible fade show my-4 mx-3" role="alert">
+                                    {{ this.alertWarning }}
+                                    <button (click)="closeAlertWarning()" type="button" class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                </div>
+                            }
+                            <div class="modal-body">
+                                <label for="type" class="form-label">Введие новое название: </label>
+                                <input [(ngModel)]="newName" type="text" name="confirmPassword" class="form-control"
+                                       id="type" placeholder="Перс" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="button" (click)="updateData()">Обновить
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="closePopupUpdateData()">Отмена
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--            /modal view update data-->
+        </div>
+    </div>
+</div>

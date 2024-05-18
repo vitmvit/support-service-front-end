@@ -1,24 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CabinetPageControlUserCreateComponent } from './cabinet-page-control-user-create.component';
-
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {CabinetPageControlUserCreateComponent} from './cabinet-page-control-user-create.component';
 
 
 describe('CabinetPageControlUserComponent', () => {
-  let component: CabinetPageControlUserCreateComponent;
-  let fixture: ComponentFixture<CabinetPageControlUserCreateComponent>;
+    let component: CabinetPageControlUserCreateComponent;
+    let fixture: ComponentFixture<CabinetPageControlUserCreateComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CabinetPageControlUserCreateComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CabinetPageControlUserCreateComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(CabinetPageControlUserCreateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(CabinetPageControlUserCreateComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

@@ -14,6 +14,9 @@ import {CabinetPageMessagesComponent} from './view/auth/cabinet/cabinet-page-mes
 import { CabinetPageControlUserCreateComponent } from './view/auth/cabinet/cabinet-page-control-user-create/cabinet-page-control-user-create.component';
 import { CabinetPageControlUserDeleteComponent } from './view/auth/cabinet/cabinet-page-control-user-delete/cabinet-page-control-user-delete.component';
 import { Page500Component } from './view/welcome/page500/page500.component';
+import { CabinetEditImageComponent } from './view/auth/cabinet/cabinet-edit-image/cabinet-edit-image.component';
+import { CabinetStateTemplateCreateComponent } from './view/auth/cabinet/cabinet-state-template-create/cabinet-state-template-create.component';
+import { CabinetEditDirectoryComponent } from './view/auth/cabinet/cabinet-edit-directory/cabinet-edit-directory.component';
 
 export const routes: Routes = [
   // welcome
@@ -32,6 +35,15 @@ export const routes: Routes = [
   {path: '', redirectTo: 'auth/cabinet/chat-list', pathMatch: 'full' },
   {path: 'auth/cabinet/chat-list', component: CabinetPageChatComponent },
   {path: 'auth/cabinet/chat/:id', component: CabinetPageChatComponent },
+
+  // cabinet edit image
+  {path: 'auth/cabinet/edit/image', component: CabinetEditImageComponent },
+
+  // cabinet edit state template
+  {path: 'auth/cabinet/edit/stateTemplate', component: CabinetStateTemplateCreateComponent },
+
+  // cabinet edit directory
+  {path: 'auth/cabinet/edit/directory', component: CabinetEditDirectoryComponent },
 
   // 500
   {path: 'page500', component: Page500Component},
